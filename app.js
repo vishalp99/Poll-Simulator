@@ -2,16 +2,21 @@ const express = require("express");
 const path = require('path');
 const hbs  = require('hbs');
 
-let candidates = [];
-let votes = new Set();
-let totalcandidate = 0;
+let candidates = [];  // to store all the candidates
+let result = [];         // store result of winner and runner up
+let votes = new Set();      //to store votes and also validate no duplicate entry
+let totalcandidate = 0;   // store total number of candidates
+let won=0,m1=0,m2=0,runner=0;  // it stores the index of winner , runner up/looser
+
+
 const app = express();
 
 // PORT
 const PORT = process.env.PORT || 4000;
 
+// setup path for view 
 app.set('views', path.join(__dirname, '/view'));
-app.set('view engine', 'hbs');
+app.set('view engine', 'hbs');   // used hbs/handlebars 
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -53,24 +58,23 @@ app.post('/votecount', function(req,res){
 });
 
 app.get('/pollresult',function(req,res){
-if(candidates.length == 0){
+
+    if(candidates.length == 0){
     res.redirect("/");
-}
- let max=0,maxv1=0,maxv2=0,runner=0;
+    }
 
  for(let i=0;i<totalcandidate;i++){
-     if(candidates[i].votes > maxv1){
-         maxv2 = maxv1;
-         runner = max;
-         maxv1 = candidates[i].votes;
-         max = i;
-     } else if(candidates[i].votes > maxv2 && candidates[i].votes < maxv1){
-        maxv2 = candidates[i].votes;
+     if(candidates[i].votes > m1){
+         m2 = m1;runner = won;
+         m1 = candidates[i].votes;
+         won = i;
+     } else if(candidates[i].votes < m1 && candidates[i].votes > m2){
+        m2 = candidates[i].votes;
         runner = i;
      }
  }
- let result = [];
- result.push({name: candidates[max].name, votes: candidates[max].votes});
+
+ result.push({name: candidates[won].name, votes: candidates[won].votes});
  result.push({name: candidates[runner].name, votes: candidates[runner].votes});
  res.render('pollresult',{ress: result});
 });
