@@ -8,7 +8,7 @@ EC Lab-1 - Poll Simulator
 #### 3. Click on Poll Reult to knwo who won and who lost/runners up. And count of votes is also dispalyed side by side.
 #### 4. Click on Voting Summary to know number of votes of all the candidates.
 
-
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
 ##### 1. This is home page from where user can go to different views.
 
